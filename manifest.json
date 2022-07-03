@@ -1,0 +1,19 @@
+{
+    "name": "screen-cature-rectangle",
+    "description": "",
+    "version": "1.0",
+    "manifest_version": 3,
+    "permissions": [
+      "activeTab"
+    ],
+    "background": {
+      "service_worker":"background.js" 
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://remotedesktop.google.com/*"],
+        "exclude_matches": ["*://*/*business*"],
+        "js": ["contentScript.js"]
+      }
+    ]
+  }
