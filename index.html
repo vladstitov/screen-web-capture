@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/tesseract.min.js'></script>
+    <script src='https://cdn.tutorialjinni.com/tesseract.js/2.1.5/worker.min.js'></script>
+
+
+    <script>
+
+///let video,
+let canvas, image, ctx;
+  let running = false;
+  let output = "";
+  let canvas2 
+  let ctx2;
+
+        const init = async () => {   
+         
+    canvas = document.getElementById('Canvas');
+    canvas2  = document.getElementById('Canvas2');
+    image = document.getElementById('Image');
+
+    // Initialize Tesseract worker
+    worker = Tesseract.createWorker({
+      logger: (m) => console.log(m),
+    });
+
+    console.log(worker);
+    await worker.load();
+    await worker.loadLanguage("eng");
+    await worker.initialize("eng");
+
+  };
+
+  /// async function initVideo() {
+  
+  //  video = document.getElementById('Video');
+    
+    
+  /*
+      const stream = await navigator.mediaDevices.getUserMedia({
+    video: true,
+ }); 
+
+      video.srcObject = stream;
+      video.play();
+    }
+  */
+  const capture = async () => {
+    ctx = canvas.getContext("2d");
+    ctx2 = canvas2.getContext("2d");
+
+    /*
+     ctx.drawImage(image,
+        70, 20,   // Start at 70/20 pixels from the left and the top of the image (crop),
+        50, 50,   // "Get" a `50 * 50` (w * h) area from the source image (crop),
+        0, 0,     // Place the result at 0, 0 in the canvas,
+        100, 100); // With as width / height: 100 * 100 (scale)
+});
+    */
+   
+
+    ctx.drawImage(image, 171, 70, 14 ,30, 0, 0, 30, 60);
+    
+
+    const img = canvas.toDataURL("image/png");
+    let  data = await worker.recognize(img);   
+    console.log(data)
+
+    ctx2.drawImage(image, 1799, 169, 49 ,12, 0, 0, 100, 22);
+
+    const img2 = canvas2.toDataURL("image/png");
+    
+    let  data2 = await worker.recognize(img2);   
+    console.log(data2)
+
+  };
+    </script>
+  </head>
+  <body>
+
+  
+    <button onclick="init()">Init</button>
+    <button onclick="capture()">Capture</button>
+
+    <img id="Image" src="Screenshot.png"/>    
+
+    <canvas id="Canvas" width="30" height="60"></canvas>
+    <br/>
+
+
+
+    <canvas id="Canvas2" width="100" height="22"></canvas>
+    
+    
+    <div style="font-size: 60px; margin-top:100px; margin-left:100px">45</div>
+  </body>
+</html>
